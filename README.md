@@ -1,2 +1,32 @@
-# HTML-TO_DO_LIST
- This project is a simple Todo List web application built using HTML, Bootstrap 5, and JavaScript. It allows users to manage tasks by adding, editing, and deleting them dynamically. Tasks are stored locally in the browser's localStorage, ensuring persistence between sessions. The application features a responsive design, making it accessible on various devices.
+# HTML Todo List Project 📝
+
+A simple web application for managing tasks using HTML, Bootstrap 5, and JavaScript.
+
+## Features 🌟
+
+- Add, edit, and delete tasks
+- Local storage integration for data persistence
+- Responsive design for various screen sizes
+
+## Usage 🚀
+
+1. Clone the repository.
+2. Open `index.html` in your web browser.
+3. Click "Add Task" to create a new task.
+4. Use edit and delete icons for task management.
+
+## Technologies Used 🛠️
+
+- HTML
+- Bootstrap 5
+- JavaScript
+
+
+
+## Contributing 🤝
+
+Contributions are welcome! Fork the repository and submit a pull request.
+
+## License 📄
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
