@@ -21,9 +21,7 @@ A simple web application for managing tasks using HTML, Bootstrap 5, and JavaScr
 - Bootstrap 5
 - JavaScript
 
-## Preview 🖼️
 
-![Todo List Preview](preview.png)
 
 ## Contributing 🤝
 
