@@ -1,14 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTML Todo List | Major Project</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css"
         integrity="sha384-QYIZto+st3yW+o8+5OHfT6S482Zsvz2WfOzpFSXMF9zqeLcFV0/wlZpMtyFcZALm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        .task-label {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-right: 4px;
+            font-size: 0.9rem;
+        }
+
+        .label-important {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .label-high {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .label-medium {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .label-low {
+            background-color: #28a745;
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
@@ -42,6 +71,8 @@
                                     <th>Task/Description</th>
                                     <th>Responsible</th>
                                     <th>ETA</th>
+                                    <th>Priority</th>
+                                    <th>Labels</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -79,6 +110,20 @@
                             <input type="datetime-local" class="form-control" id="addETA" name="taskETA"
                                 placeholder="Click to Add time">
                         </div>
+                        <div class="mb-1">
+                            <label for="addPriority" class="form-label">Priority</label>
+                            <select class="form-select" id="addPriority" name="taskPriority">
+                                <option value="important">Important</option>
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                        <div class="mb-1">
+                            <label for="addLabels" class="form-label">Labels</label>
+                            <input type="text" class="form-control" id="addLabels" name="taskLabels"
+                                placeholder="Add labels separated by commas">
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
@@ -113,6 +158,20 @@
                             <label for="editETA" class="form-label">ETA</label>
                             <input type="datetime-local" class="form-control" id="editETA" name="taskETA"
                                 placeholder="Click to Add time">
+                        </div>
+                        <div class="mb-1">
+                            <label for="editPriority" class="form-label">Priority</label>
+                            <select class="form-select" id="editPriority" name="taskPriority">
+                                <option value="important">Important</option>
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                        <div class="mb-1">
+                            <label for="editLabels" class="form-label">Labels</label>
+                            <input type="text" class="form-control" id="editLabels" name="taskLabels"
+                                placeholder="Add labels separated by commas">
                         </div>
                         <input type="hidden" id="editIndex" name="taskIndex">
                     </div>
@@ -171,21 +230,56 @@
                     for (let i in storageObjectArr) {
                         var task = storageObjectArr[i];
                         var date = new Date(task.taskETA);
+                        var priorityLabel = getPriorityLabel(task.taskPriority);
+                        var labels = task.taskLabels ? task.taskLabels.split(',').map(label => `<span class="task-label ${getLabelClass(label.trim())}">${label.trim()}</span>`).join('') : '';
+
                         html += '<tr>' +
                             '<td>' + (parseInt(i) + 1) + '</td>' +
                             '<td>' + task.taskDescription + '</td>' +
                             '<td>' + task.taskResponsiblePerson + '</td>' +
                             '<td>' + date.toUTCString() + '</td>' +
+                            '<td>' + priorityLabel + '</td>' +
+                            '<td>' + labels + '</td>' +
                             '<td><i class="bi bi-check-circle-fill" onclick="markAsDone(' + i + ')"></i> <i class="bi bi-pencil-square" onclick="editTask(' + i + ')"></i></td>' +
                             '</tr>';
                     }
                 } else {
-                    html = '<tr><td colspan="5">No tasks added yet</td></tr>';
+                    html = '<tr><td colspan="7">No tasks added yet</td></tr>';
                 }
             } else {
-                html = '<tr><td colspan="5">No tasks added yet</td></tr>';
+                html = '<tr><td colspan="7">No tasks added yet</td></tr>';
             }
             $("#taskTableBody").html(html);
+        }
+
+        function getPriorityLabel(priority) {
+            switch (priority) {
+                case 'important':
+                    return '<span class="badge bg-danger">Important</span>';
+                case 'high':
+                    return '<span class="badge bg-warning text-dark">High</span>';
+                case 'medium':
+                    return '<span class="badge bg-info text-dark">Medium</span>';
+                case 'low':
+                    return '<span class="badge bg-success">Low</span>';
+                default:
+                    return '';
+            }
+        }
+
+        function getLabelClass(label) {
+            switch (label.toLowerCase()) {
+                case 'urgent':
+                    return 'label-important';
+                case 'high':
+                    return 'label-high';
+                case 'medium':
+                    return 'label-medium';
+                case 'low':
+                    return 'label-low';
+                default:
+                    return 'label-secondary';
+            }
         }
 
         function markAsDone(index) {
@@ -207,6 +301,8 @@
                 $("#editTaskTextArea").val(storageObjectArr[index]['taskDescription']);
                 $("#editResponsiblePerson").val(storageObjectArr[index]['taskResponsiblePerson']);
                 $("#editETA").val(storageObjectArr[index]['taskETA']);
+                $("#editPriority").val(storageObjectArr[index]['taskPriority']);
+                $("#editLabels").val(storageObjectArr[index]['taskLabels']);
                 $("#editIndex").val(index);
                 $("#updateTaskModal").modal('show');
             }
